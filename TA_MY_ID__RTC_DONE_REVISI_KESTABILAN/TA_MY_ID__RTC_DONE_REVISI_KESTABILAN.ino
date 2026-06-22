@@ -87,23 +87,22 @@ int jadwal[3][2] = {
 
 bool sudahMakan[3] = {false,false,false};
 
+
 // =====================================================
-// SERVO PAKAN
+// SERVO PAKAN (FULL POWER + DETACH)
 // =====================================================
 void putarServo(int putaran){
 
-  servo.attach(SERVO_PIN, 500, 2400);
-
-  for(int i=0;i<putaran;i++){
-
-    servo.write(90);
-    delay(300);
-
-    servo.write(0);
-    delay(300);
+  for(int i = 0; i < putaran; i++){
+    servo.attach(SERVO_PIN, 500, 2500);
+    // FULL POWER
+    servo.writeMicroseconds(2500);
+    // Lama putaran, sesuaikan dengan mekanisme pakan
+    delay(600);
+    // Putus sinyal agar benar-benar berhenti
+    servo.detach();
+    delay(1000);
   }
-
-  servo.detach();
 }
 
 // =====================================================
@@ -290,7 +289,7 @@ void setup() {
   digitalWrite(RELAY_ISI, LOW);
   digitalWrite(RELAY_NTU, HIGH);
   
-
+  servo.setPeriodHertz(50);
   servoPH.setPeriodHertz(50);
   servoPH.attach(SERVO_PH_PIN, 500, 2400);
   servoPH.write(stopServoPH);
